@@ -1,64 +1,50 @@
 package org.onlinebankingapp.entity;
 
 import jakarta.persistence.*;
-import jakarta.persistence.Id;
-
 
 @Entity
-@Table(name = "users")
+@Table(
+        name = "users",
+        uniqueConstraints = {
+                @UniqueConstraint(columnNames = "username"),
+                @UniqueConstraint(columnNames = "email")
+        }
+)
 public class User {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "uid", nullable = false)
     private Long id;
 
-    @Column(name = "username", nullable = false)
-    private String name;
+    @Column(nullable = false, length = 50)
+    private String username;
 
-    @Column(name = "useremail", nullable = false)
+    @Column(nullable = false, length = 100)
     private String email;
 
-    @Column(name = "userpass", nullable = false)
+    @Column(nullable = false)
     private String password;
 
-    public User() {
-    }
+    // Optional but production-ready (can be single role for now)
+    @Column(nullable = false)
+    private String role = "ROLE_USER";
+
+    protected User() {}
 
     public User(Long id) {
         this.id = id;
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
+    public User(String username, String email, String password) {
+        this.username = username;
         this.email = email;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
         this.password = password;
     }
 
-
+    // getters only (immutability preferred)
+    public Long getId() { return id; }
+    public String getUsername() { return username; }
+    public String getEmail() { return email; }
+    public String getPassword() { return password; }
+    public String getRole() { return role; }
 }
