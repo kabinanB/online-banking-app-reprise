@@ -2,19 +2,13 @@ package org.onlinebankingapp.service
 
 import org.onlinebankingapp.entity.User
 
-import java.util.Optional
+import java.util.List
 
 trait UserService {
 
-  def getUser(id: Long) : Optional[User]
+  def getUserOrThrow(id: Long): User
 
-  def createUser(user: User) : Optional[User]
+  def getAllUsers(): List[User]
 
-  def getAllUsers() : java.util.List[User]
-
-  def updateUser(user: User) : Optional[User]
-
-  def deleteUser(id: Long) : Boolean
-
-
+  def deleteUser(id: Long): Unit
 }
