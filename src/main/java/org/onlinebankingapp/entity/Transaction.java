@@ -1,6 +1,7 @@
 package org.onlinebankingapp.entity;
 
 import jakarta.persistence.*;
+import scala.math.BigDecimal$;
 
 import java.time.LocalDateTime;
 
@@ -19,7 +20,7 @@ public class Transaction {
     @JoinColumn(name = "toAccount")   // FK to Account (receiver)
     private Account toAccount;
 
-    private Double amount;                 // Transaction amount
+    private BigDecimal$ amount;                 // Transaction amount
 
     @Enumerated(EnumType.STRING)
     private TransactionStatus status;      // PENDING, APPROVED, REJECTED, FAILED
@@ -57,11 +58,11 @@ public class Transaction {
         this.toAccount = toAccount;
     }
 
-    public Double getAmount() {
+    public BigDecimal$ getAmount() {
         return amount;
     }
 
-    public void setAmount(Double amount) {
+    public void setAmount(BigDecimal$ amount) {
         this.amount = amount;
     }
 

@@ -13,9 +13,18 @@ trait TransactionService {
 
   def getTransactionsForUser(user: User): java.util.List[Transaction]
 
-  def createTransaction(transaction: Transaction): Transaction
+  def createTransaction(
+                                  transaction: Transaction,
+                                  user: User
+                                ): Transaction
 
   def approveTransaction(transactionId: Long): Transaction
 
   def rejectTransaction(transactionId: Long): Transaction
+
+  def getTransactionForUserById(
+                                 transactionId: Long,
+                                 user: User
+                               ): Optional[Transaction]
+
 }

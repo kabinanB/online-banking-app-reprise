@@ -26,11 +26,20 @@ class TransactionServiceImpl @Autowired() (
   override def getTransactionsForUser(user: User): util.List[Transaction] =
     transactionRepo.findByFromAccount_UserOrToAccount_User(user, user)
 
-  override def createTransaction(transaction: Transaction): Transaction = {
+  override def createTransaction(
+                                  transaction: Transaction,
+                                  user: User
+                                ): Transaction = {
+
+    val fromAccount = transaction.getFromAccount
+
+    if (fromAccount.getUser.getId != user.getId)
+      throw new RuntimeException("You can only send money from your own account")
+
     transaction.setStatus(TransactionStatus.PENDING)
-    transaction.setTimestamp(LocalDateTime.now())
     transactionRepo.save(transaction)
   }
+
 
   @Transactional
   override def approveTransaction(transactionId: Long): Transaction = {
@@ -66,5 +75,13 @@ class TransactionServiceImpl @Autowired() (
 
     tx.setStatus(TransactionStatus.REJECTED)
     transactionRepo.save(tx)
+  }
+
+  override def getTransactionForUserById(
+                                          transactionId: Long,
+                                          user: User
+                                        ): Optional[Transaction] = {
+
+    transactionRepo.findByIdAndUser(transactionId, user)
   }
 }

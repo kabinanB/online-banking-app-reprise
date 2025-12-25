@@ -2,40 +2,36 @@ package org.onlinebankingapp.entity;
 
 import jakarta.persistence.*;
 import jakarta.persistence.Id;
-
+import scala.math.BigDecimal$;
 
 import java.util.List;
 
 @Entity
-@Table(name = "accounts")
+@Table(
+        name = "accounts",
+        uniqueConstraints = {
+                @UniqueConstraint(columnNames = {"user_id", "account_type"})
+        }
+)
 public class Account {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;                    // Primary key
+    private Long id;
 
-    @Enumerated(EnumType.STRING)
-    private AccountType type;
-
-    private Double balance;              // Current balance
-
-    @ManyToOne
-    @JoinColumn(name = "uid")       // Foreign key to User
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "user_id")
     private User user;
 
-    @OneToMany(mappedBy = "fromAccount")
-    private List<Transaction> outgoingTransactions;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "account_type", nullable = false)
+    private AccountType accountType;
 
-    @OneToMany(mappedBy = "toAccount")
-    private List<Transaction> incomingTransactions;
+    @Column(nullable = false)
+    private BigDecimal$ balance;
 
+    // getters/setters
 
-    public Account() {
-    }
-
-    public Account(Long id) {
-        this.id = id;
-    }
 
     public Long getId() {
         return id;
@@ -43,22 +39,6 @@ public class Account {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public AccountType getType() {
-        return type;
-    }
-
-    public void setType(AccountType type) {
-        this.type = type;
-    }
-
-    public Double getBalance() {
-        return balance;
-    }
-
-    public void setBalance(Double balance) {
-        this.balance = balance;
     }
 
     public User getUser() {
@@ -69,19 +49,20 @@ public class Account {
         this.user = user;
     }
 
-    public List<Transaction> getOutgoingTransactions() {
-        return outgoingTransactions;
+    public AccountType getAccountType() {
+        return accountType;
     }
 
-    public void setOutgoingTransactions(List<Transaction> outgoingTransactions) {
-        this.outgoingTransactions = outgoingTransactions;
+    public void setAccountType(AccountType accountType) {
+        this.accountType = accountType;
     }
 
-    public List<Transaction> getIncomingTransactions() {
-        return incomingTransactions;
+    public BigDecimal$ getBalance() {
+        return balance;
     }
 
-    public void setIncomingTransactions(List<Transaction> incomingTransactions) {
-        this.incomingTransactions = incomingTransactions;
+    public void setBalance(BigDecimal$ balance) {
+        this.balance = balance;
     }
 }
+

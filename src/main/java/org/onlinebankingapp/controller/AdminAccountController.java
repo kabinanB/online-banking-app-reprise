@@ -12,7 +12,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/admin/accounts")
-public class AccountController {
+public class AdminAccountController {
 
     @Autowired
     private AccountService accountService;
