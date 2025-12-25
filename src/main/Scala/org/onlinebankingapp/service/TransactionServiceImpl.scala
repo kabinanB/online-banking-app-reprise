@@ -82,6 +82,10 @@ class TransactionServiceImpl @Autowired() (
                                           user: User
                                         ): Optional[Transaction] = {
 
-    transactionRepo.findByIdAndUser(transactionId, user)
+    transactionRepo.findById(transactionId).filter { tx =>
+      tx.getFromAccount.getUser.getId == user.getId ||
+        tx.getToAccount.getUser.getId == user.getId
+    }
   }
+
 }

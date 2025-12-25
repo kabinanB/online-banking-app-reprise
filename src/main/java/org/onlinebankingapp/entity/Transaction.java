@@ -20,7 +20,7 @@ public class Transaction {
     @JoinColumn(name = "toAccount")   // FK to Account (receiver)
     private Account toAccount;
 
-    private BigDecimal$ amount;                 // Transaction amount
+    private Double amount;                 // Transaction amount
 
     @Enumerated(EnumType.STRING)
     private TransactionStatus status;      // PENDING, APPROVED, REJECTED, FAILED
@@ -58,11 +58,11 @@ public class Transaction {
         this.toAccount = toAccount;
     }
 
-    public BigDecimal$ getAmount() {
+    public Double getAmount() {
         return amount;
     }
 
-    public void setAmount(BigDecimal$ amount) {
+    public void setAmount(Double amount) {
         this.amount = amount;
     }
 

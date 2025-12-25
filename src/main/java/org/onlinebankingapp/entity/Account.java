@@ -28,7 +28,7 @@ public class Account {
     private AccountType accountType;
 
     @Column(nullable = false)
-    private BigDecimal$ balance;
+    private Double balance;
 
     // getters/setters
 
@@ -57,11 +57,11 @@ public class Account {
         this.accountType = accountType;
     }
 
-    public BigDecimal$ getBalance() {
+    public Double getBalance() {
         return balance;
     }
 
-    public void setBalance(BigDecimal$ balance) {
+    public void setBalance(Double balance) {
         this.balance = balance;
     }
 }

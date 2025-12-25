@@ -75,7 +75,7 @@ class AccountServiceImpl @Autowired()(accountRepo: AccountRepo)
     val account = new Account()
     account.setUser(user)
     account.setAccountType(accountType)
-    account.setBalance(BigDecimal.decimal(0.0))
+    account.setBalance(0.0)
 
     accountRepo.save(account)
   }

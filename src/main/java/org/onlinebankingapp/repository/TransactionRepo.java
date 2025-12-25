@@ -10,18 +10,20 @@ import java.util.Optional;
 
 @Repository
 public interface TransactionRepo extends JpaRepository<Transaction, Long> {
-    // All outgoing transactions
+
+    // Outgoing transactions
     List<Transaction> findByFromAccount_User(User user);
 
-    // All incoming transactions
+    // Incoming transactions
     List<Transaction> findByToAccount_User(User user);
 
-    // All transactions (either direction)
+    // All transactions for a user
     List<Transaction> findByFromAccount_UserOrToAccount_User(User user1, User user2);
 
-
-    Optional<Transaction> findByIdAndUser(Long id, User user);
-
-    List<Transaction> findAllByUser(User user);
-
+    // Transaction belongs to user (security-safe)
+    Optional<Transaction> findByIdAndFromAccount_UserOrIdAndToAccount_User(
+            Long id1, User user1,
+            Long id2, User user2
+    );
 }
+

@@ -1,6 +1,6 @@
 package org.onlinebankingapp.controller;
 
-
+import org.onlinebankingapp.dto.PasswordChangeRequest;
 import org.onlinebankingapp.entity.User;
 import org.onlinebankingapp.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,59 +8,40 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-import java.util.Optional;
-
 @RestController
-@RequestMapping("/admin/users")
+@RequestMapping("/users")
 public class UserController {
 
     @Autowired
     private UserService userService;
 
-    @GetMapping
-    public ResponseEntity<List<User>> allUsers(){
-
-        List<User> users = userService.getAllUsers();
-
-        return ResponseEntity.status(HttpStatus.OK).body(users);
+    // Self-signup endpoint
+    @PostMapping("/signup")
+    public ResponseEntity<User> signup(@RequestBody User user) {
+        // Assign default role USER
+        User newUser = userService.createUserWithRole(user, "USER");
+        return ResponseEntity.status(HttpStatus.CREATED).body(newUser);
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<User> getUserById(@PathVariable("id") Long id){
-        User user = userService.getUserOrThrow(id);
-
-        return ResponseEntity.status(HttpStatus.OK).body(user);
+    // Get current logged-in user info
+    @GetMapping("/me")
+    public ResponseEntity<User> getCurrentUser() {
+        User current = userService.getCurrentAuthenticatedUser();
+        return ResponseEntity.ok(current);
     }
 
-    @PostMapping("/add")
-    public ResponseEntity<User> addNewUser(@RequestBody User user){
-        User newUser = userService.createUser(user);
-
-        return new ResponseEntity<User>(newUser, HttpStatus.CREATED);
+    // Update profile for current user
+    @PutMapping("/me")
+    public ResponseEntity<User> updateCurrentUser(@RequestBody User user) {
+        User updated = userService.updateCurrentAuthenticatedUser(user);
+        return ResponseEntity.ok(updated);
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<User> updateUser(@PathVariable("id") Long id, @RequestBody User user){
-        User updatedUser = userService.updateUser(user);
-
-        return ResponseEntity.status(HttpStatus.OK).body(updatedUser);
+    // Change password
+    @PostMapping("/me/password")
+    public ResponseEntity<Void> changePassword(@RequestBody PasswordChangeRequest request) {
+        userService.changePassword(request.getOldPassword(), request.getNewPassword());
+        return ResponseEntity.ok().build();
     }
-
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Boolean> deleteUser(@PathVariable("id") Long id) {
-        Boolean deletedUser = userService.deleteUser(id);
-
-        return ResponseEntity.ok(deletedUser);
-
-
-    }
-
-
-
-
-
-
-
-
 }
+
