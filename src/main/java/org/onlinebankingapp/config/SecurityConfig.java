@@ -34,11 +34,23 @@ public class SecurityConfig {
                         session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/auth/**").permitAll()
+                        // Public endpoints - anyone can access
+                        .requestMatchers(
+                                "/auth/register",     // ✅ Allow registration
+                                "/auth/login",        // ✅ Allow login
+                                "/h2-console/**",     // ✅ Allow H2 (dev only)
+                                "/error"              // ✅ Allow error page
+                        ).permitAll()
+
+                        // Admin-only endpoints
+                        .requestMatchers("/admin/**").hasAuthority("ROLE_ADMIN")
+
+                        // All other endpoints require authentication
                         .anyRequest().authenticated()
                 )
-                .authenticationProvider(authProvider) // 🔴 IMPORTANT
-                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class) // 🔴 IMPORTANT
+                .authenticationProvider(authProvider)
+                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
+                .headers(headers -> headers.frameOptions(frame -> frame.disable())) // For H2
                 .build();
     }
 

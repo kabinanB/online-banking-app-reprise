@@ -25,9 +25,8 @@ public class User {
     @Column(nullable = false)
     private String password;
 
-    // Optional but production-ready (can be single role for now)
     @Column(nullable = false)
-    private String role = "ROLE_USER";
+    private String role = "ROLE_USER";  // Default role for new users
 
     protected User() {}
 
@@ -39,12 +38,18 @@ public class User {
         this.username = username;
         this.email = email;
         this.password = password;
+        this.role = "ROLE_USER";  // Default to regular user
     }
 
-    // getters only (immutability preferred)
+    // Getters
     public Long getId() { return id; }
     public String getUsername() { return username; }
     public String getEmail() { return email; }
     public String getPassword() { return password; }
     public String getRole() { return role; }
+
+    // Add setter for role
+    public void setRole(String role) {
+        this.role = role;
+    }
 }

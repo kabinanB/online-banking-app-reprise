@@ -6,9 +6,13 @@ import java.util.List
 
 trait UserService {
 
+  def createUser(user: User): User
+
   def getUserOrThrow(id: Long): User
 
   def getAllUsers(): List[User]
 
-  def deleteUser(id: Long): Unit
+  def updateUser(user: User): User
+
+  def deleteUser(id: Long): Boolean
 }

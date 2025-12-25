@@ -27,22 +27,22 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Optional<User>> getUserById(@PathVariable("id") Long id){
-        Optional<User> user = userService.getUser(id);
+    public ResponseEntity<User> getUserById(@PathVariable("id") Long id){
+        User user = userService.getUserOrThrow(id);
 
         return ResponseEntity.status(HttpStatus.OK).body(user);
     }
 
     @PostMapping("/add")
-    public ResponseEntity<Optional<User>> addNewUser(@RequestBody User user){
-        Optional<User> newUser = userService.createUser(user);
+    public ResponseEntity<User> addNewUser(@RequestBody User user){
+        User newUser = userService.createUser(user);
 
-        return new ResponseEntity<Optional<User>>(newUser, HttpStatus.CREATED);
+        return new ResponseEntity<User>(newUser, HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Optional<User>> updateUser(@PathVariable("id") Long id, @RequestBody User user){
-        Optional<User> updatedUser = userService.createUser(user);
+    public ResponseEntity<User> updateUser(@PathVariable("id") Long id, @RequestBody User user){
+        User updatedUser = userService.updateUser(user);
 
         return ResponseEntity.status(HttpStatus.OK).body(updatedUser);
     }
@@ -51,7 +51,7 @@ public class UserController {
     public ResponseEntity<Boolean> deleteUser(@PathVariable("id") Long id) {
         Boolean deletedUser = userService.deleteUser(id);
 
-        return new ResponseEntity<Boolean>(deletedUser, HttpStatus.NO_CONTENT);
+        return ResponseEntity.ok(deletedUser);
 
 
     }

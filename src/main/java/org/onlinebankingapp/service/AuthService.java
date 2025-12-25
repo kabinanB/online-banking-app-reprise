@@ -18,9 +18,8 @@ public class AuthService {
     }
 
     public void register(RegisterRequest request) {
-
         if (userRepo.findByUsername(request.getUsername()).isPresent()) {
-            throw new IllegalStateException("Username already exists");
+            throw new IllegalArgumentException("Username already exists");
         }
 
         User user = new User(
@@ -28,6 +27,13 @@ public class AuthService {
                 request.getEmail(),
                 passwordEncoder.encode(request.getPassword())
         );
+
+        // Make first user admin, rest are regular users
+        if (userRepo.count() == 0) {
+            user.setRole("ROLE_ADMIN");
+        } else {
+            user.setRole("ROLE_USER");
+        }
 
         userRepo.save(user);
     }
